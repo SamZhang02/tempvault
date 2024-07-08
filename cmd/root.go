@@ -9,9 +9,9 @@ import (
 
 var rootCmd = &cobra.Command{
 	Use:   "tempvault",
-	Short: "tempvault is a command line tool to rapidly access and paste your template files.",
+	Short: "tempvault is a command line tool to rapidly access and use your template files.",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Browse templates!")
+		cmd.Help()
 	},
 }
 
