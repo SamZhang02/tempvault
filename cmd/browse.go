@@ -56,7 +56,7 @@ var browseCmd = &cobra.Command{
 
 			if overwriteFile {
 				util.CopyFile(src, dst)
-				fmt.Println("Pasted file ", filename, "into the current directory.")
+				fmt.Println("Pasted file", filename, "into the current directory.")
 			}
 		}
 	},
