@@ -1,13 +1,15 @@
 package cmd
 
 import (
+	"bufio"
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 
-	"tempvault/config"
+	"tempvault/util"
+	"tempvault/vault"
 
-	fzf "github.com/junegunn/fzf/src"
 	"github.com/spf13/cobra"
 )
 
@@ -19,58 +21,43 @@ var browseCmd = &cobra.Command{
 	Use:   "browse",
 	Short: "Browse the vault.",
 	Run: func(cmd *cobra.Command, args []string) {
-		vaultDir, err := config.GetTempVaultDir()
+		files, err := vault.SelectFilesFromVault()
 		if err != nil {
-			fmt.Fprintln(os.Stderr, err.Error())
-			os.Exit(1)
+			fmt.Printf("An error occurd browsing files. error: %s\n", err)
 		}
 
-		inputChan := make(chan string)
-		go func() {
-			err := filepath.Walk(vaultDir, func(path string, info os.FileInfo, err error) error {
-				if err != nil {
-					return err
-				}
-				if !info.IsDir() {
-					inputChan <- filepath.Base(path)
-				}
-				return nil
-			})
-			if err != nil {
-				fmt.Printf("An error occurred while walking through the vault directory, error: %s\n", err)
-			}
-			close(inputChan)
-		}()
-
-		outputChan := make(chan string)
-		go func() {
-			for s := range outputChan {
-				fmt.Println("Got: " + s)
-			}
-		}()
-
-		exit := func(code int, err error) {
-			if err != nil {
-				fmt.Fprintln(os.Stderr, err.Error())
-			}
-			os.Exit(code)
-		}
-
-		// Build fzf.Options
-		options, err := fzf.ParseOptions(
-			true, // whether to load defaults ($FZF_DEFAULT_OPTS_FILE and $FZF_DEFAULT_OPTS)
-			[]string{"--preview", "cat " + vaultDir + "/{}", "--multi"},
-		)
+		cwd, err := os.Getwd()
 		if err != nil {
-			exit(fzf.ExitError, err)
+			fmt.Println("Error getting cwd, error: ", err)
 		}
 
-		// Set up input and output channels
-		options.Input = inputChan
-		options.Output = outputChan
+		vaultDir, err := vault.GetTempVaultDir()
+		if err != nil {
+			fmt.Println("Error getting vault dir, error: ", err)
+		}
 
-		// Run fzf
-		code, err := fzf.Run(options)
-		exit(code, err)
+		for _, filename := range files {
+			src := filepath.Join(vaultDir, filename)
+			dst := filepath.Join(cwd, filename)
+
+			var overwriteFile = true
+			if util.FileExists(dst) {
+				reader := bufio.NewReader(os.Stdin)
+
+				fmt.Printf("File %s already exists in the current working directory. Do you want to overwrite it? (y/n): ", filename)
+				response, _ := reader.ReadString('\n')
+				response = strings.TrimSpace(response)
+
+				if strings.ToLower(response) != "y" {
+					overwriteFile = false
+				}
+
+			}
+
+			if overwriteFile {
+				util.CopyFile(src, dst)
+				fmt.Println("Successfully pasted file ", filename, "into the current directory.")
+			}
+		}
 	},
 }

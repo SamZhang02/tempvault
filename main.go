@@ -5,11 +5,11 @@ import (
 	"os"
 
 	"tempvault/cmd"
-	"tempvault/config"
+	"tempvault/vault"
 )
 
 func createTempVaultDir() error {
-	tempVaultDir, err := config.GetTempVaultDir()
+	tempVaultDir, err := vault.GetTempVaultDir()
 	if err != nil {
 		return err
 	}
