@@ -127,7 +127,7 @@ func SelectFilesFromVault() ([]string, error) {
 		return nil, err
 	}
 
-	if code != 0 {
+	if code != 0 && code != 130 {
 		return nil, fmt.Errorf("fzf exited with code %d", code)
 	}
 	return selectedFiles, nil
