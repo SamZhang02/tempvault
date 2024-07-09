@@ -25,6 +25,23 @@ sh install.sh
 
 **Disclaimer**: I personally use MacOS, the script may not work well for all other OS.
 
+## Usage
+tempvault currently support two commands:
+
+`tempvault add [file]` adds a files to the vault.
+
+`tempvault browse` browses and searches the vault, allowing you to select files to paste into the cwd.
+
+With enough interest, I am open to look into refining the tool with more functionalities and customizability. 
+
+Personally, I use the alias below
+```shell
+alias tv="tempvault"
+alias tva="tempvault add"
+alias tvb="tempvault brose"
+```
+for a fast workflow with the tool.
+
 ## Contributing
 All contributions are welcome in the form of issues or pull request.
 
