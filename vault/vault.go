@@ -95,7 +95,7 @@ func SelectFilesFromVault() ([]string, error) {
 			return nil
 		})
 		if err != nil {
-			fmt.Printf("An error occurred while walking through the vault directory, error: %s\n", err)
+			fmt.Fprintf(os.Stderr, "An error occurred while walking through the vault directory, error: %s\n", err)
 		}
 	}()
 

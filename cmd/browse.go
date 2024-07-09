@@ -23,17 +23,17 @@ var browseCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		files, err := vault.SelectFilesFromVault()
 		if err != nil {
-			fmt.Printf("An error occurd browsing files. error: %s\n", err)
+			fmt.Fprintf(os.Stderr, "An error occurd browsing files. error: %s\n", err)
 		}
 
 		cwd, err := os.Getwd()
 		if err != nil {
-			fmt.Println("Error getting cwd, error: ", err)
+			fmt.Fprintln(os.Stderr, "Error getting cwd, error: ", err)
 		}
 
 		vaultDir, err := vault.GetTempVaultDir()
 		if err != nil {
-			fmt.Println("Error getting vault dir, error: ", err)
+			fmt.Fprintln(os.Stderr, "Error getting vault dir, error: ", err)
 		}
 
 		for _, filename := range files {
@@ -44,7 +44,7 @@ var browseCmd = &cobra.Command{
 			if util.FileExists(dst) {
 				reader := bufio.NewReader(os.Stdin)
 
-				fmt.Printf("File %s already exists in the current working directory. Do you want to overwrite it? (y/n): ", filename)
+				fmt.Fprintf(os.Stderr, "File %s already exists in the current working directory. Do you want to overwrite it? (y/n): ", filename)
 				response, _ := reader.ReadString('\n')
 				response = strings.TrimSpace(response)
 

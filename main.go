@@ -28,7 +28,7 @@ func createTempVaultDir() error {
 func main() {
 	err := createTempVaultDir()
 	if err != nil {
-		fmt.Println("Error creating temp vault directory:", err)
+		fmt.Fprintln(os.Stderr, "Error creating temp vault directory:", err)
 		os.Exit(1)
 	}
 
