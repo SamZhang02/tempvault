@@ -40,7 +40,7 @@ Personally, I use the alias below
 ```shell
 alias tv="tempvault"
 alias tva="tempvault add"
-alias tvb="tempvault brose"
+alias tvb="tempvault browse"
 ```
 for a fast workflow with the tool.
 
