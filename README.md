@@ -25,6 +25,8 @@ sh install.sh
 
 **Disclaimer**: I personally use MacOS, the script may not work well for all other OS.
 
+For now, there are not ready-to-use binaries yet.
+
 ## Usage
 tempvault currently support two commands:
 
